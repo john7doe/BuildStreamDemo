@@ -10,9 +10,11 @@ using Microsoft.AppCenter.Data;
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace Todo
 {
-	public class App : Application
-	{
-		static TodoItemDatabase database;
+    public class App : Application
+    {
+        static TodoItemDatabase database;
+
+        public static bool IsLoggedIn { get; set; }
 
 		public App()
 		{

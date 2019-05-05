@@ -13,22 +13,27 @@ namespace Todo
 		{
 		}
 
-		public async Task<List<TodoItem>> GetItemsAsync()
-		{
+        public async Task<List<TodoItem>> GetItemsAsync()
+        {
             var todos = new List<TodoItem>();
-            /*
             var pages = await acData.Data.ListAsync<TodoItem>(acData.DefaultPartitions.UserDocuments);
 
             do
             {
                 var wrappedItems = pages.CurrentPage.Items;
                 todos.AddRange(wrappedItems.Select(GetItemFromWrapped));
-                await pages.GetNextPageAsync();
-            } while (pages.HasNextPage);
-*/
-            return todos;
+                if (pages.HasNextPage)
+                {
+                    await pages.GetNextPageAsync();
+                }
+                else
+                {
+                    break;
+                }
+            } while (true);
 
-		}
+            return todos;
+        }
 
         private TodoItem GetItemFromWrapped(acData.DocumentWrapper<TodoItem> arg)
         {

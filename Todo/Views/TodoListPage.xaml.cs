@@ -16,6 +16,19 @@ namespace Todo
 		{
 			base.OnAppearing();
 
+            if (!App.IsLoggedIn)
+            {
+                try
+                {
+                    var result = await Auth.SignInAsync();
+                    App.IsLoggedIn = true;
+                }
+                catch (Exception)
+                {
+                    // Ignore
+                }
+            } 
+
 			// Reset the 'resume' id, since we just want to re-start here
 			((App)App.Current).ResumeAtTodoId = -1;
 			listView.ItemsSource = await App.Database.GetItemsAsync();
@@ -28,12 +41,6 @@ namespace Todo
 				BindingContext = new TodoItem()
 			});
 		}
-
-        async void OnAuthChange(object sender, EventArgs e) {
-            var result = await Auth.SignInAsync();
-            Console.WriteLine(result.AccountId);
-        }
-
 
         async void OnListItemSelected(object sender, SelectedItemChangedEventArgs e)
 		{
