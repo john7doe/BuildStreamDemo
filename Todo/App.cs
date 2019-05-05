@@ -18,7 +18,7 @@ namespace Todo
 		{
             AppCenter.LogLevel = LogLevel.Verbose;
 
-            AppCenter.Start("android=e2a89d4b-929c-4936-9b70-e33ace1ac02c;ios=64299519-9231-4461-8e0e-b4a0272ebc2f", typeof(Auth), typeof(Data));
+            AppCenter.Start("android=e2a89d4b-929c-4936-9b70-e33ace1ac02c;ios=e2a89d4b-929c-4936-9b70-e33ace1ac02c", typeof(Auth), typeof(Data));
 
 
 			Resources = new ResourceDictionary();

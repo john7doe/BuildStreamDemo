@@ -43,5 +43,19 @@
 	<string>Todo</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLTypes</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>msal</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>msale2a89d4b-929c-4936-9b70-e33ace1ac02c</string>
+			</array>
+		</dict>
+		<dict/>
+	</array>
 </dict>
 </plist>

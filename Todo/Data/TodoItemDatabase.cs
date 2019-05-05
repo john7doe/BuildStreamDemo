@@ -16,14 +16,16 @@ namespace Todo
 		public async Task<List<TodoItem>> GetItemsAsync()
 		{
             var todos = new List<TodoItem>();
-            var documents = await acData.Data.ListAsync<TodoItem>(acData.DefaultPartitions.UserDocuments);
+            /*
+            var pages = await acData.Data.ListAsync<TodoItem>(acData.DefaultPartitions.UserDocuments);
 
             do
             {
-                var wrappedItems = documents.CurrentPage.Items;
+                var wrappedItems = pages.CurrentPage.Items;
                 todos.AddRange(wrappedItems.Select(GetItemFromWrapped));
-            } while (documents.HasNextPage);
-
+                await pages.GetNextPageAsync();
+            } while (pages.HasNextPage);
+*/
             return todos;
 
 		}
