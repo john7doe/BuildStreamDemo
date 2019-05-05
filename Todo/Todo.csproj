@@ -9,8 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="3.6.0.220655" />
-    <PackageReference Include="sqlite-net-pcl" Version="1.4.118" />
+    <PackageReference Include="Xamarin.Forms" Version="3.6.0.344457" />
+    <PackageReference Include="Microsoft.AppCenter.Auth" Version="2.0.1-r0001-6512460" />
+    <PackageReference Include="Microsoft.AppCenter.Data" Version="2.0.1-r0001-6512460" />
   </ItemGroup>
 
   <ItemGroup>

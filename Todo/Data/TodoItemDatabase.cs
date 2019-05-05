@@ -1,49 +1,65 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using SQLite;
+
+using acData = Microsoft.AppCenter.Data;
 
 namespace Todo
-{
+{    
 	public class TodoItemDatabase
 	{
-		readonly SQLiteAsyncConnection database;
-
-		public TodoItemDatabase(string dbPath)
+        public TodoItemDatabase(string dbPath)
 		{
-			database = new SQLiteAsyncConnection(dbPath);
-			database.CreateTableAsync<TodoItem>().Wait();
 		}
 
-		public Task<List<TodoItem>> GetItemsAsync()
+		public async Task<List<TodoItem>> GetItemsAsync()
 		{
-			return database.Table<TodoItem>().ToListAsync();
+            var todos = new List<TodoItem>();
+            var documents = await acData.Data.ListAsync<TodoItem>(acData.DefaultPartitions.UserDocuments);
+
+            do
+            {
+                var wrappedItems = documents.CurrentPage.Items;
+                todos.AddRange(wrappedItems.Select(GetItemFromWrapped));
+            } while (documents.HasNextPage);
+
+            return todos;
+
 		}
 
-		public Task<List<TodoItem>> GetItemsNotDoneAsync()
+        private TodoItem GetItemFromWrapped(acData.DocumentWrapper<TodoItem> arg)
+        {
+            var item = arg.DeserializedValue;
+            item.ID = arg.Id;
+            return item;
+        }
+
+        public async Task<TodoItem> GetItemAsync(string id)
 		{
-			return database.QueryAsync<TodoItem>("SELECT * FROM [TodoItem] WHERE [Done] = 0");
+            var wrappedItem = await acData.Data.ReadAsync<TodoItem>(id, acData.DefaultPartitions.UserDocuments);
+            return GetItemFromWrapped(wrappedItem);
+        }
+
+        public async Task<string> SaveItemAsync(TodoItem item)
+		{
+            if(item.ID == null)
+            {
+                item.ID = Guid.NewGuid().ToString();
+                await acData.Data.CreateAsync(item.ID, item, acData.DefaultPartitions.UserDocuments);
+            } 
+            else
+            {
+                await acData.Data.ReplaceAsync(item.ID, item, acData.DefaultPartitions.UserDocuments);
+            }
+            return item.ID;
 		}
 
-		public Task<TodoItem> GetItemAsync(int id)
+		public async Task<string> DeleteItemAsync(TodoItem item)
 		{
-			return database.Table<TodoItem>().Where(i => i.ID == id).FirstOrDefaultAsync();
-		}
-
-		public Task<int> SaveItemAsync(TodoItem item)
-		{
-			if (item.ID != 0)
-			{
-				return database.UpdateAsync(item);
-			}
-			else {
-				return database.InsertAsync(item);
-			}
-		}
-
-		public Task<int> DeleteItemAsync(TodoItem item)
-		{
-			return database.DeleteAsync(item);
-		}
-	}
+            var wrappedItem = await acData.Data.DeleteAsync<TodoItem>(item.ID, acData.DefaultPartitions.UserDocuments);
+            return wrappedItem.Id;
+        }
+    }
 }
 

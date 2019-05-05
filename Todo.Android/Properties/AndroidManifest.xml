@@ -1,5 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="Todo.Android">
-	<uses-sdk android:minSdkVersion="15" />
-	<application android:label="Todo" android:icon="@drawable/check2x"></application>
+	<uses-sdk android:minSdkVersion="15" android:targetSdkVersion="28" />
+	<application android:label="Todo" android:icon="@drawable/check2x">
+		<activity android:name="com.microsoft.identity.client.BrowserTabActivity">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:host="auth" android:scheme="msale2a89d4b-929c-4936-9b70-e33ace1ac02c" />
+			</intent-filter>
+		</activity>
+	</application>
 </manifest>

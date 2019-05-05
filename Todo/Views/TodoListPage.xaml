@@ -4,10 +4,11 @@
 		<ToolbarItem Text="+" Clicked="OnItemAdded">
 			<ToolbarItem.Icon>
 				<OnPlatform x:TypeArguments="FileImageSource">
-        <On Platform="Android, UWP" Value="plus.png" />
-    </OnPlatform>
+                    <On Platform="Android, UWP" Value="plus.png" />
+                </OnPlatform>
 			</ToolbarItem.Icon>
 		</ToolbarItem>
+        <ToolbarItem Text="Login" Clicked="OnAuthChange"/>
 	</ContentPage.ToolbarItems>
 	<ListView x:Name="listView" Margin="20" ItemSelected="OnListItemSelected">
 		<ListView.ItemTemplate>

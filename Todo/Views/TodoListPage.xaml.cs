@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using Microsoft.AppCenter.Auth;
 using Xamarin.Forms;
 
 namespace Todo
@@ -28,7 +29,13 @@ namespace Todo
 			});
 		}
 
-		async void OnListItemSelected(object sender, SelectedItemChangedEventArgs e)
+        async void OnAuthChange(object sender, EventArgs e) {
+            var result = await Auth.SignInAsync();
+            Console.WriteLine(result.AccountId);
+        }
+
+
+        async void OnListItemSelected(object sender, SelectedItemChangedEventArgs e)
 		{
             //((App)App.Current).ResumeAtTodoId = (e.SelectedItem as TodoItem).ID;
             //Debug.WriteLine("setting ResumeAtTodoId = " + (e.SelectedItem as TodoItem).ID);
