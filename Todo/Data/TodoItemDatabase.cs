@@ -21,7 +21,7 @@ namespace Todo
             do
             {
                 var wrappedItems = pages.CurrentPage.Items;
-                todos.AddRange(wrappedItems.Select(GetItemFromWrapped));
+                todos.AddRange(wrappedItems.Select(td => td.DeserializedValue));
                 if (pages.HasNextPage)
                 {
                     await pages.GetNextPageAsync();
@@ -35,17 +35,10 @@ namespace Todo
             return todos;
         }
 
-        private TodoItem GetItemFromWrapped(acData.DocumentWrapper<TodoItem> arg)
-        {
-            var item = arg.DeserializedValue;
-            item.ID = arg.Id;
-            return item;
-        }
-
         public async Task<TodoItem> GetItemAsync(string id)
 		{
             var wrappedItem = await acData.Data.ReadAsync<TodoItem>(id, acData.DefaultPartitions.UserDocuments);
-            return GetItemFromWrapped(wrappedItem);
+            return wrappedItem.DeserializedValue;
         }
 
         public async Task<string> SaveItemAsync(TodoItem item)
@@ -65,7 +58,7 @@ namespace Todo
 		public async Task<string> DeleteItemAsync(TodoItem item)
 		{
             var wrappedItem = await acData.Data.DeleteAsync<TodoItem>(item.ID, acData.DefaultPartitions.UserDocuments);
-            return wrappedItem.Id;
+            return item.ID;
         }
     }
 }
